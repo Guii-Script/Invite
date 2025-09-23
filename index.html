@@ -7,13 +7,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <style>
         :root {
-            --background-color: #FDFBF5;
-            --text-color: #58644a;
-            --highlight-color: #8a9a7b;
-            --glow-color: rgba(138, 154, 123, 0.5);
+            --background-color: #F8F6F0;
+            --text-color: #4a543e;
+            --highlight-color: #7b8a6b;
+            --gold-color: #c0a16b;
             --font-script: 'Great Vibes', cursive;
             --font-serif: 'Cormorant Garamond', serif;
         }
@@ -25,365 +24,171 @@
             color: var(--text-color);
             display: flex;
             justify-content: center;
-            align-items: flex-start;
+            align-items: center;
             min-height: 100vh;
             text-align: center;
-            overflow-x: hidden;
-            padding: 50px 0;
-            box-sizing: border-box;
-        }
-
-        .background-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            overflow: hidden;
-        }
-        
-        @keyframes move-bokeh {
-            0% { transform: translate(0, 0); opacity: 0; }
-            20% { opacity: 0.6; }
-            80% { opacity: 0.6; }
-            100% { transform: translate(var(--x-end), var(--y-end)); opacity: 0; }
-        }
-
-        .bokeh-light {
-            position: absolute;
-            border-radius: 50%;
-            background-color: var(--highlight-color);
-            filter: blur(40px);
-            animation: move-bokeh 20s infinite linear;
-        }
-
-        /* Gerando várias luzes com posições e delays diferentes */
-        .bokeh-light:nth-child(1) { top: 10%; left: 15%; width: 150px; height: 150px; --x-end: 10vw; --y-end: -20vh; animation-delay: 0s; }
-        .bokeh-light:nth-child(2) { top: 70%; left: 80%; width: 200px; height: 200px; --x-end: -15vw; --y-end: 10vh; animation-delay: -5s; }
-        .bokeh-light:nth-child(3) { top: 50%; left: 5%; width: 100px; height: 100px; --x-end: 20vw; --y-end: 15vh; animation-delay: -10s; }
-        .bokeh-light:nth-child(4) { top: 20%; left: 75%; width: 180px; height: 180px; --x-end: -10vw; --y-end: 25vh; animation-delay: -15s; }
-
-
-        .invitation-container {
-            max-width: 500px;
-            width: 90%;
             padding: 20px;
             box-sizing: border-box;
+        }
+        
+        /* O contêiner principal que segura TUDO */
+        .invitation-card {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+            border: 2px solid var(--gold-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+            opacity: 0;
+            transform: scale(0.95);
+            animation: fadeInCard 1.2s 0.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            overflow: hidden; /* Essencial para conter a imagem */
+        }
+
+        @keyframes fadeInCard {
+            to { 
+                opacity: 1; 
+                transform: scale(1);
+            }
+        }
+        
+        /* Contêiner para a imagem de fundo */
+        .background-image-container {
+            position: absolute;
+            
+            width: 100%;
+            height: 101%;
+            
+        }
+        
+        .background-image-container img {
+            width: 100%;
+            height: 100%;
+            /* A MÁGICA ACONTECE AQUI: Cobre a área sem distorcer */
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* O conteúdo do convite */
+        .invitation-content {
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 25px;
-            position: relative;
-            z-index: 1;
+            justify-content: center;
+            gap: 1.5vh;
+            /* Fundo levemente translúcido para melhorar a leitura */
+            background-color: rgba(248, 246, 240, 0.2);
+            backdrop-filter: blur(1px);
         }
 
-        /* --- Music Toggle --- */
-        .music-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            cursor: pointer;
-            z-index: 100;
-            color: var(--text-color);
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-        .music-toggle:hover {
-            transform: scale(1.1);
-            color: var(--highlight-color);
-        }
-        .music-toggle svg {
-            width: 28px;
-            height: 28px;
-        }
-
-        /* --- Scroll Animation Classes --- */
-        .reveal-on-scroll {
+        /* Animações de entrada para o conteúdo */
+        .reveal-content {
             opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 1.5s cubic-bezier(0.19, 1, 0.22, 1), transform 1.5s cubic-bezier(0.19, 1, 0.22, 1);
+            transform: translateY(20px);
+            transition: opacity 1.2s ease-out, transform 1.2s ease-out;
         }
-        .reveal-on-scroll.visible {
+        .reveal-content.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* --- Text Elements --- */
-        .quote {
-            font-size: 1.15rem;
-            line-height: 1.7;
-            font-style: italic;
-            max-width: 450px;
-        }
+        /* Estilos dos Elementos */
+        .quote { font-size: clamp(0.9rem, 2.5vw, 1.1rem); line-height: 1.6; font-style: italic; max-width: 90%; }
+        .names { font-family: var(--font-script); font-size: clamp(3.2rem, 10vw, 4.8rem); margin: 0; font-weight: normal; }
+        .invitation-text { font-size: clamp(1rem, 3vw, 1.2rem); line-height: 1.5; }
 
-        .names {
-            font-family: var(--font-script);
-            font-size: 5rem;
-            margin: 10px 0;
-            font-weight: normal;
-        }
-        
-        .invitation-text {
-            font-size: 1.25rem;
-            line-height: 1.6;
-        }
-        
-        /* --- Date Section --- */
-        .date-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-            width: 90%;
-            position: relative;
-            border-top: 1px solid var(--highlight-color);
-            border-bottom: 1px solid var(--highlight-color);
-        }
-        .date-section .day {
-            font-size: 5rem;
-            font-weight: 700;
-            line-height: 1;
-            color: var(--highlight-color);
-            animation: pulse-glow 3s infinite ease-in-out;
-        }
-        @keyframes pulse-glow {
-            0%, 100% { text-shadow: 0 0 10px transparent; }
-            50% { text-shadow: 0 0 20px var(--glow-color); }
-        }
+        .date-section { display: flex; flex-direction: column; align-items: center; padding: 10px 0; }
+        .date-section .day { font-size: clamp(3.5rem, 12vw, 4.5rem); font-weight: 700; line-height: 1; color: var(--highlight-color); }
+        .date-section .month, .date-section .year { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* --- Countdown Timer --- */
-        .countdown {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .countdown > div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--highlight-color);
-            border-radius: 50%;
-            width: 90px;
-            height: 90px;
-        }
-        .countdown .time {
-            font-size: 2.5rem;
-            font-weight: 700;
-            line-height: 1;
-        }
-        .countdown .label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .countdown { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 1vh 0; }
+        .countdown > div { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--highlight-color); border-radius: 50%; width: 70px; height: 70px; }
+        .countdown .time { font-size: 1.8rem; font-weight: 700; }
+        .countdown .label { font-size: 0.6rem; text-transform: uppercase; }
 
-        /* --- Icons Section --- */
-        .icons-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 30px 20px;
-            width: 100%;
-            max-width: 400px;
-            margin-top: 20px;
-        }
-        .icon-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-            text-decoration: none;
-            color: var(--text-color);
-            font-weight: 600;
-            transition: transform 0.3s ease, color 0.3s ease;
-        }
-        .icon-item:hover {
-            transform: translateY(-5px);
-            color: var(--highlight-color);
-        }
-        .icon-item svg {
-            width: 48px;
-            height: 48px;
-            stroke-width: 1.5;
-        }
-        .icon-item .rsvp-date {
-            font-size: 0.8rem;
-            font-weight: normal;
-            margin-top: -5px;
-        }
-        .footer-text {
-            font-style: italic;
-        }
+        .icons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 15px; width: 100%; max-width: 350px; margin-top: 1vh; }
+        .icon-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: var(--text-color); font-weight: 600; font-size: 0.9rem; transition: transform 0.3s ease, color 0.3s ease; }
+        .icon-item:hover { transform: translateY(-5px); color: var(--highlight-color); }
+        .icon-item svg { width: 40px; height: 40px; stroke-width: 1.5; }
+        .icon-item .rsvp-date { font-size: 0.75rem; font-weight: normal; }
 
-        /* Responsive Design */
-        @media (max-width: 480px) {
-            .names { font-size: 3.8rem; }
-            .date-section .day { font-size: 4rem; }
-            .countdown > div { width: 70px; height: 70px; }
-            .countdown .time { font-size: 1.8rem; }
-            .icons-grid { gap: 25px 15px; }
-        }
+        .footer-text { font-style: italic; font-size: 0.9rem; }
     </style>
 </head>
 <body>
 
-    <div class="background-wrapper">
-        <div class="bokeh-light"></div>
-        <div class="bokeh-light"></div>
-        <div class="bokeh-light"></div>
-        <div class="bokeh-light"></div>
-    </div>
-
-    <div class="music-toggle" id="music-toggle">
-        <svg id="icon-music-on" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-        <svg id="icon-music-off" xmlns="http://www.w.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
-    </div>
-
-    <div class="invitation-container">
-
-        <p class="quote reveal-on-scroll">
-            "Deus mudou o teu caminho até juntares com o meu e guardou a tua vida separando-a para mim. Para onde fores, irei. Onde tu repousares, repousarei. Teu Deus será o meu Deus. Teu caminho o meu será."
-            <br>- Rute 1:16
-        </p>
-
-        <h1 class="names reveal-on-scroll">Jaqueline & Cleverson</h1>
-
-        <p class="invitation-text reveal-on-scroll">
-            Com o amor de Deus e de seus pais, <br> convidam você para o nosso casamento:
-        </p>
-        
-        <div class="date-section reveal-on-scroll">
-            <div class="month">MAR</div>
-            <div class="day">21</div>
-            <div class="year">2026</div>
-            <div class="details">SÁBADO ÀS 19:00</div>
+    <div class="invitation-card">
+        <div class="background-image-container">
+            <img src="image/fundo.jpg" alt="Fundo do convite com folhas e textura de tecido">
         </div>
-
-        <div class="countdown-wrapper reveal-on-scroll">
-            <div class="countdown">
-                <div><span id="days" class="time">0</span><span class="label">Dias</span></div>
-                <div><span id="hours" class="time">0</span><span class="label">Horas</span></div>
-                <div><span id="minutes" class="time">0</span><span class="label">Min</span></div>
-                <div><span id="seconds" class="time">0</span><span class="label">Seg</span></div>
+        <div class="invitation-content">
+            <p class="quote reveal-content">
+                "Deus mudou o teu caminho até juntares com o meu e guardou a tua vida separando-a para mim. Para onde fores, irei. Onde tu repousares, repousarei. Teu Deus será o meu Deus. Teu caminho o meu será."
+                <br>- Rute 1:16
+            </p>
+            <h1 class="names reveal-content">Jaqueline & Cleverson</h1>
+            <p class="invitation-text reveal-content">Com o amor de Deus e de seus pais, <br> convidam você para o nosso casamento:</p>
+            <div class="date-section reveal-content">
+                <div class="month">MAR</div>
+                <div class="day">21</div>
+                <div class="year">2026</div>
             </div>
+            <div class="countdown-wrapper reveal-content">
+                <div class="countdown">
+                    <div><span id="days" class="time">00</span><span class="label">Dias</span></div>
+                    <div><span id="hours" class="time">00</span><span class="label">Horas</span></div>
+                    <div><span id="minutes" class="time">00</span><span class="label">Min</span></div>
+                    <div><span id="seconds" class="time">00</span><span class="label">Seg</span></div>
+                </div>
+            </div>
+            <div class="icons-grid">
+                <a href="#" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 6.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/><path d="M12.5 12.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/></svg><span>Cerimônia</span></a>
+                <a href="#" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="m16 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M6 16h12"/><path d="M12 16v6"/></svg><span>Recepção</span></a>
+                <a href="#" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><span>Presentes</span></a>
+                <a href="#" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Confirmar</span><span class="rsvp-date">até 10/02/2026</span></a>
+            </div>
+            <p class="footer-text reveal-content">Toque nos ícones para interagir</p>
         </div>
-
-        <div class="icons-grid">
-            <a href="#" class="icon-item reveal-on-scroll">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 6.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/><path d="M12.5 12.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/></svg>
-                <span>Cerimônia</span>
-            </a>
-            <a href="#" class="icon-item reveal-on-scroll">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="m16 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M6 16h12"/><path d="M12 16v6"/></svg>
-                <span>Recepção</span>
-            </a>
-            <a href="#" class="icon-item reveal-on-scroll">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-                <span>Presenteie os noivos</span>
-            </a>
-            <a href="#" class="icon-item reveal-on-scroll">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                <span>Confirmar presença</span>
-                <span class="rsvp-date">até 10/02/2026</span>
-            </a>
-        </div>
-        
-        <p class="footer-text reveal-on-scroll">
-            Toque nos ícones acima para interagir!
-        </p>
-
     </div>
-
+    
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- SCROLL REVEAL ANIMATION ---
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
-                if (entry.isIntersecting) {
-                    // Adiciona um delay incremental para cada elemento
-                    const delay = (entry.target.dataset.index || 0) * 100;
-                    setTimeout(() => {
-                        entry.target.classList.add('visible');
-                    }, delay);
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.reveal-on-scroll').forEach((el, index) => {
-            el.dataset.index = index; // Armazena o índice para o delay
-            observer.observe(el);
+        const contentElements = document.querySelectorAll('.reveal-content');
+        contentElements.forEach((el, index) => {
+            setTimeout(() => {
+                el.classList.add('visible');
+            }, 800 + (index * 100)); 
         });
 
-        // --- COUNTDOWN TIMER ---
         const targetDate = new Date('2026-03-21T19:00:00').getTime();
-        const countdownElements = {
+        const elems = {
             days: document.getElementById('days'),
             hours: document.getElementById('hours'),
             minutes: document.getElementById('minutes'),
             seconds: document.getElementById('seconds')
         };
-        const updateCountdown = () => {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
-            if (distance < 0) {
-                clearInterval(countdownInterval);
+        const interval = setInterval(() => {
+            const distance = targetDate - new Date().getTime();
+            if(distance < 0) {
+                clearInterval(interval);
+                Object.keys(elems).forEach(key => { if (elems[key]) elems[key].textContent = '00'; });
                 return;
             }
             const values = {
-                days: Math.floor(distance / (1000 * 60 * 60 * 24)),
-                hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-                minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
-                seconds: Math.floor((distance % (1000 * 60)) / 1000)
+                days: Math.floor(distance / (1000*60*60*24)),
+                hours: Math.floor((distance % (1000*60*60*24)) / (1000*60*60)),
+                minutes: Math.floor((distance % (1000*60*60)) / (1000*60)),
+                seconds: Math.floor((distance % (1000*60)) / 1000)
             };
-            Object.keys(values).forEach(key => {
-                if (countdownElements[key]) {
-                    countdownElements[key].textContent = values[key];
+            Object.keys(elems).forEach(key => {
+                if (elems[key]) {
+                   elems[key].textContent = String(values[key]).padStart(2, '0');
                 }
             });
-        };
-        const countdownInterval = setInterval(updateCountdown, 1000);
-
-        // --- MUSIC ---
-        const musicToggle = document.getElementById('music-toggle');
-        const iconOn = document.getElementById('icon-music-on');
-        const iconOff = document.getElementById('icon-music-off');
-        let isPlaying = false;
-        let synth;
-
-        const setupMusic = () => {
-            synth = new Tone.PolySynth(Tone.Synth, {
-                oscillator: { type: "triangle8" },
-                envelope: { attack: 2, decay: 1, sustain: 0.4, release: 4 }
-            }).toDestination();
-            const melody = new Tone.Sequence((time, note) => {
-                synth.triggerAttackRelease(note, "2n", time);
-            }, ["C4", "G4", "A4", "E4", "F4", "C4", "G3", "B3"], "1m");
-            melody.loop = true;
-            Tone.Transport.bpm.value = 70;
-            Tone.Transport.start();
-            melody.start(0);
-        }
-
-        musicToggle.addEventListener('click', () => {
-            if (!isPlaying) {
-                if (Tone.context.state !== 'running') {
-                    Tone.context.resume().then(setupMusic);
-                } else {
-                   setupMusic();
-                }
-                iconOn.style.display = 'block';
-                iconOff.style.display = 'none';
-                isPlaying = true;
-            } else {
-                if (synth) synth.releaseAll();
-                Tone.Transport.stop();
-                iconOn.style.display = 'none';
-                iconOff.style.display = 'block';
-                isPlaying = false;
-            }
-        });
+        }, 1000);
     });
     </script>
 </body>
