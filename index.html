@@ -31,7 +31,6 @@
             box-sizing: border-box;
         }
         
-        /* O contêiner principal que segura TUDO */
         .invitation-card {
             position: relative;
             max-width: 500px;
@@ -42,7 +41,7 @@
             opacity: 0;
             transform: scale(0.95);
             animation: fadeInCard 1.2s 0.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-            overflow: hidden; /* Essencial para conter a imagem */
+            overflow: hidden; 
         }
 
         @keyframes fadeInCard {
@@ -52,24 +51,22 @@
             }
         }
         
-        /* Contêiner para a imagem de fundo */
         .background-image-container {
             position: absolute;
-            
+            top: 0;
+            left: 0;
             width: 100%;
             height: 101%;
-            
+            z-index: 0;
         }
         
         .background-image-container img {
             width: 100%;
             height: 100%;
-            /* A MÁGICA ACONTECE AQUI: Cobre a área sem distorcer */
             object-fit: cover;
             object-position: center;
         }
 
-        /* O conteúdo do convite */
         .invitation-content {
             position: relative;
             z-index: 1;
@@ -79,12 +76,10 @@
             align-items: center;
             justify-content: center;
             gap: 1.5vh;
-            /* Fundo levemente translúcido para melhorar a leitura */
-            background-color: rgba(248, 246, 240, 0.2);
-            backdrop-filter: blur(1px);
+            /* Sombra sutil para garantir legibilidade, sem afetar o fundo */
+            text-shadow: 0px 1px 3px rgba(255, 255, 255, 0.6);
         }
 
-        /* Animações de entrada para o conteúdo */
         .reveal-content {
             opacity: 0;
             transform: translateY(20px);
@@ -95,7 +90,6 @@
             transform: translateY(0);
         }
 
-        /* Estilos dos Elementos */
         .quote { font-size: clamp(0.9rem, 2.5vw, 1.1rem); line-height: 1.6; font-style: italic; max-width: 90%; }
         .names { font-family: var(--font-script); font-size: clamp(3.2rem, 10vw, 4.8rem); margin: 0; font-weight: normal; }
         .invitation-text { font-size: clamp(1rem, 3vw, 1.2rem); line-height: 1.5; }
@@ -105,7 +99,7 @@
         .date-section .month, .date-section .year { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
 
         .countdown { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 1vh 0; }
-        .countdown > div { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--highlight-color); border-radius: 50%; width: 70px; height: 70px; }
+        .countdown > div { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--highlight-color); border-radius: 50%; width: 70px; height: 70px; background-color: rgba(255,255,255,0.15); }
         .countdown .time { font-size: 1.8rem; font-weight: 700; }
         .countdown .label { font-size: 0.6rem; text-transform: uppercase; }
 
