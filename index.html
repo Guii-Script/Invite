@@ -66,6 +66,25 @@
             text-shadow: 0px 1px 3px rgba(255, 255, 255, 0.6);
         }
 
+        /* --- Botão de Música --- */
+        .music-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .music-toggle:hover {
+            transform: scale(1.1);
+        }
+        .music-toggle svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--text-color);
+            stroke-width: 1.5;
+        }
+
         .reveal-content {
             opacity: 0;
             transform: translateY(20px);
@@ -99,6 +118,21 @@
     </style>
 </head>
 <body>
+    <!-- Player de áudio escondido com o arquivo local -->
+    <audio id="background-music" src="musica.mp4" loop></audio>
+
+    <!-- Botão para controlar a música -->
+    <div class="music-toggle" id="music-toggle">
+        <svg id="icon-sound-on" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+        </svg>
+        <svg id="icon-sound-off" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+        </svg>
+    </div>
 
     <div class="invitation-card">
         <div class="invitation-content">
@@ -125,7 +159,7 @@
                 <!-- LINKS ATUALIZADOS AQUI -->
                 <a href="https://maps.app.goo.gl/ojCigKDEsbUQz8GK7?g_st=iw" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 6.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/><path d="M12.5 12.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/></svg><span>Cerimônia</span></a>
                 <a href="https://maps.app.goo.gl/jVHSAVS7oSGjZFuD7?g_st=iw" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="m16 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M6 16h12"/><path d="M12 16v6"/></svg><span>Recepção</span></a>
-                <a href="https://sites.icasei.com.br/jaquelineecleverson" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><span>Presentes</span></a>
+                <a href="https://sites.icasei.com.br/jaquelineecleverson" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><span>Presentes</span></a>
                 <a href="https://wa.me/5519993927429?text=Boa%20Tarde%2C%20%0A%0AGostaria%20de%20confirmar%20presen%C3%A7a%20no%20casamento%20Jaqueline%20e%20Cleverson.%20%0A" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Confirmar</span><span class="rsvp-date">até 10/02/2026</span></a>
             </div>
             <p class="footer-text reveal-content">Toque nos ícones para interagir</p>
@@ -167,7 +201,42 @@
                 }
             });
         }, 1000);
+
+        // --- LÓGICA DA MÚSICA ATUALIZADA ---
+        const musicToggle = document.getElementById('music-toggle');
+        const backgroundMusic = document.getElementById('background-music');
+        const iconSoundOn = document.getElementById('icon-sound-on');
+        const iconSoundOff = document.getElementById('icon-sound-off');
+
+        // Tenta tocar a música automaticamente
+        const playPromise = backgroundMusic.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                // Autoplay funcionou. Mostra o ícone de som ligado.
+                iconSoundOn.style.display = 'block';
+                iconSoundOff.style.display = 'none';
+            }).catch(error => {
+                // Autoplay falhou. Mostra o ícone de som desligado.
+                console.log("Autoplay da música foi bloqueado pelo navegador.");
+                iconSoundOn.style.display = 'none';
+                iconSoundOff.style.display = 'block';
+            });
+        }
+
+        musicToggle.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                iconSoundOn.style.display = 'block';
+                iconSoundOff.style.display = 'none';
+            } else {
+                backgroundMusic.pause();
+                iconSoundOn.style.display = 'none';
+                iconSoundOff.style.display = 'block';
+            }
+        });
     });
     </script>
 </body>
 </html>
+
