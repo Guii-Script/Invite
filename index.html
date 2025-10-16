@@ -9,10 +9,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
     <style>
         :root {
-            --background-color: #F8F6F0;
-            --text-color: #4a543e;
-            --highlight-color: #7b8a6b;
-            --gold-color: #c0a16b;
+            --background-color: #F7F2E9; /* Champagne */
+            --text-color: #4E443A;       /* Dark Chocolate */
+            --highlight-color: #BEA97C;  /* Soft Gold */
+            --gold-color: #BEA97C;       /* Soft Gold */
+            --card-background: #FCFBF4;  /* Light Cream */
+            --user-green: #eafed9;       /* O verde que você pediu */
             --font-script: 'Great Vibes', cursive;
             --font-serif: 'Cormorant Garamond', serif;
         }
@@ -24,26 +26,51 @@
             color: var(--text-color);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: center; /* Inicia centralizado */
             min-height: 100vh;
             text-align: center;
+            overflow: hidden; /* Previne scroll APENAS durante a animação inicial */
             padding: 20px;
             box-sizing: border-box;
         }
         
+        /* --- Efeito de Portões (Gatefold) --- */
+        .gate {
+            position: fixed;
+            top: 0;
+            width: 50.5vw; /* Leve sobreposição para evitar frestas */
+            height: 100vh;
+            background-color: var(--user-green);
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 1.5s cubic-bezier(0.77, 0, 0.175, 1);
+            font-family: var(--font-script);
+            font-size: 15vw;
+            color: var(--gold-color);
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+        }
+        .gate.left { left: 0; }
+        .gate.right { right: 0; }
+
+        body.open .gate.left { transform: translateX(-100%); }
+        body.open .gate.right { transform: translateX(100%); }
+        
+        /* --- Contêiner Principal --- */
         .invitation-card {
             position: relative;
             max-width: 500px;
             width: 100%;
             border: 2px solid var(--gold-color);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             box-sizing: border-box;
             opacity: 0;
-            transform: scale(0.95);
-            animation: fadeInCard 1.2s 0.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
-            background-size: 100% 100%; 
-            background-position: center;
-            background-repeat: no-repeat;
+            transform: scale(0.9);
+            animation: fadeInCard 1s 1s cubic-bezier(0.19, 1, 0.22, 1) forwards;
+            background-color: var(--card-background); 
+            padding: 40px 20px;
+            margin: 40px 0; /* Adiciona margem vertical para rolagem */
         }
 
         @keyframes fadeInCard {
@@ -54,15 +81,11 @@
         }
         
         .invitation-content {
-            position: relative;
-            z-index: 1;
-            padding: 40px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             gap: 1.5vh;
-            text-shadow: 0px 1px 3px rgba(255, 255, 255, 0.6);
         }
 
         .reveal-content {
@@ -75,8 +98,8 @@
             transform: translateY(0);
         }
 
-        .quote { font-size: clamp(0.9rem, 2.5vw, 1.1rem); line-height: 1.6; font-style: italic; max-width: 90%; }
-        .names { font-family: var(--font-script); font-size: clamp(3.2rem, 10vw, 4.8rem); margin: 0; font-weight: normal; }
+        .quote { font-size: clamp(0.9rem, 2.5vw, 1.1rem); line-height: 1.6; font-style: italic; max-width: 90%; border-bottom: 1px solid rgba(190, 169, 124, 0.3); padding-bottom: 1.5vh;}
+        .names { font-family: var(--font-script); font-size: clamp(3.2rem, 10vw, 4.8rem); margin: 0; font-weight: normal; color: var(--gold-color); }
         .invitation-text { font-size: clamp(1rem, 3vw, 1.2rem); line-height: 1.5; }
 
         .date-section { display: flex; flex-direction: column; align-items: center; padding: 10px 0; }
@@ -84,7 +107,7 @@
         .date-section .month, .date-section .year { font-size: 1.1rem; text-transform: uppercase; letter-spacing: 1px; }
 
         .countdown { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; margin: 1vh 0; }
-        .countdown > div { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--highlight-color); border-radius: 50%; width: 70px; height: 70px; background-color: rgba(255,255,255,0.15); }
+        .countdown > div { display: flex; flex-direction: column; align-items: center; justify-content: center; border: 1px solid var(--highlight-color); border-radius: 50%; width: 70px; height: 70px; background-color: rgba(252, 251, 244, 0.5); }
         .countdown .time { font-size: 1.8rem; font-weight: 700; }
         .countdown .label { font-size: 0.6rem; text-transform: uppercase; }
 
@@ -98,6 +121,8 @@
     </style>
 </head>
 <body>
+    <div class="gate left">J</div>
+    <div class="gate right">C</div>
 
     <div class="invitation-card">
         <div class="invitation-content">
@@ -132,11 +157,22 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
+        // Abre os portões após um pequeno atraso
+        setTimeout(() => {
+            document.body.classList.add('open');
+            // Após a animação dos portões, permite o scroll e ajusta o alinhamento
+            setTimeout(() => {
+                document.body.style.overflowY = 'auto';
+                document.body.style.alignItems = 'flex-start';
+            }, 1500); // Duração da animação dos portões
+        }, 500);
+
+        // Anima a entrada do conteúdo depois que os portões começam a abrir
         const contentElements = document.querySelectorAll('.reveal-content');
         contentElements.forEach((el, index) => {
             setTimeout(() => {
                 el.classList.add('visible');
-            }, 800 + (index * 100)); 
+            }, 1500 + (index * 100)); // Começa a animar após a animação dos portões
         });
 
         const targetDate = new Date('2026-03-21T19:00:00').getTime();
@@ -169,3 +205,4 @@
     </script>
 </body>
 </html>
+
