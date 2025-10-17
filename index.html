@@ -19,35 +19,29 @@
             --gate-green: #4a543e;       /* Verde escuro para os portões */
             --font-script: 'Great Vibes', cursive;
             --font-serif: 'Cormorant Garamond', serif;
-
-            /* FORÇA O MODO CLARO E IMPEDE A INVERSÃO DE CORES DO NAVEGADOR */
             color-scheme: light;
         }
 
         body {
             margin: 0;
             font-family: var(--font-serif);
-            /* CORREÇÃO DEFINITIVA: Usa um gradiente sutil para enganar o modo escuro forçado */
             background-image: linear-gradient(to bottom, var(--background-color), var(--background-color-end));
             color: var(--text-color);
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Alinhado ao topo para rolagem */
+            align-items: flex-start; 
             min-height: 100vh;
             text-align: center;
-            /* overflow: hidden;  Removido para evitar flicker */
             padding: 20px;
             box-sizing: border-box;
         }
         
-        /* --- Efeito de Portões (Gatefold) --- */
         .gate {
             position: fixed;
             top: 0;
-            width: 50.5vw; /* Leve sobreposição para evitar frestas */
+            width: 50.5vw;
             height: 100vh;
             background-color: var(--gate-green);
-            /* Efeito de luz sutil */
             background-image: radial-gradient(circle at center, rgba(255,255,255,0.08) 0%, transparent 70%);
             z-index: 100;
             display: flex;
@@ -57,9 +51,8 @@
             font-family: var(--font-script);
             font-size: 15vw;
             color: var(--gold-color);
-            /* Brilho acentuado */
             text-shadow: 0 0 15px rgba(190, 169, 124, 0.5);
-            will-change: transform; /* Otimização da animação */
+            will-change: transform;
         }
         .gate.left { left: 0; }
         .gate.right { right: 0; }
@@ -67,7 +60,6 @@
         body.open .gate.left { transform: translateX(-100%); }
         body.open .gate.right { transform: translateX(100%); }
         
-        /* --- Contêiner Principal --- */
         .invitation-card {
             position: relative;
             max-width: 500px;
@@ -77,11 +69,10 @@
             box-sizing: border-box;
             opacity: 0;
             transform: scale(0.9);
-            animation: fadeInCard 1s 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards; /* Atraso ajustado */
-            /* CORREÇÃO DEFINITIVA: Usa um gradiente sutil para o cartão também */
+            animation: fadeInCard 1s 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards;
             background-image: linear-gradient(to bottom, var(--card-background), var(--card-background-end));
             padding: 40px 20px;
-            margin: 40px 0; /* Adiciona margem vertical para rolagem */
+            margin: 40px 0;
         }
 
         @keyframes fadeInCard {
@@ -122,11 +113,23 @@
         .countdown .time { font-size: 1.8rem; font-weight: 700; }
         .countdown .label { font-size: 0.6rem; text-transform: uppercase; }
 
-        .icons-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px 15px; width: 100%; max-width: 350px; margin-top: 1vh; }
+        .icons-grid { 
+            display: grid; 
+            grid-template-columns: repeat(2, 1fr); 
+            gap: 20px 15px; 
+            width: 100%; 
+            max-width: 350px; 
+            margin-top: 1vh;
+            align-items: start; /* CORREÇÃO: Alinha os botões ao topo */
+        }
         .icon-item { display: flex; flex-direction: column; align-items: center; gap: 8px; text-decoration: none; color: var(--text-color); font-weight: 600; font-size: 0.9rem; transition: transform 0.3s ease, color 0.3s ease; }
         .icon-item:hover { transform: translateY(-5px); color: var(--highlight-color); }
         .icon-item svg { width: 40px; height: 40px; stroke-width: 1.5; }
-        .icon-item .rsvp-date, .icon-item .icon-time { font-size: 0.75rem; font-weight: normal; margin-top: -4px; }
+        .icon-item .rsvp-date, .icon-item .icon-time { 
+            font-size: 0.9rem; /* AUMENTADO */
+            font-weight: 600; /* Destaque */
+            margin-top: -2px; 
+        }
 
         .footer-text { font-style: italic; font-size: 0.9rem; }
     </style>
@@ -158,16 +161,16 @@
             </div>
             <div class="icons-grid">
                 <a href="https://maps.app.goo.gl/ojCigKDEsbUQz8GK7?g_st=iw" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 6.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/><path d="M12.5 12.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16.5 6.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/><path d="M12.5 12.5a4.5 4.5 0 1 0-9 0 4.5 4.5 0 0 0 9 0z"/></svg>
                     <span>Cerimônia</span>
-                    <span class="icon-time">Horário: 19:00</span>
+                    <span class="icon-time">Horários: 19:00</span>
                 </a>
                 <a href="https://maps.app.goo.gl/jVHSAVS7oSGjZFuD7?g_st=iw" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="m16 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M6 16h12"/><path d="M12 16v6"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="m16 2a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h0a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/><path d="M6 16h12"/><path d="M12 16v6"/></svg>
                     <span>Recepção</span>
-                    <span class="icon-time">Horário: 20:30</span>
+                    <span class="icon-time">Horários: 20:30</span>
                 </a>
-                <a href="https://sites.icasei.com.br/jaquelineecleverson" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><span>Presentes</span></a>
+                <a href="https://noivos.casar.com/jaqueline-e-cleverson-2026-03-31" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12v10H4V12"/><path d="M2 7h20v5H2z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg><span>Presentes</span></a>
                 <a href="https://wa.me/5519993927429?text=Boa%20Tarde%2C%20%0A%0AGostaria%20de%20confirmar%20presen%C3%A7a%20no%20casamento%20Jaqueline%20e%20Cleverson.%20%0A" target="_blank" rel="noopener noreferrer" class="icon-item reveal-content"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg><span>Confirmar</span><span class="rsvp-date">até 10/02/2026</span></a>
             </div>
             <p class="footer-text reveal-content">Toque nos ícones para interagir</p>
@@ -176,23 +179,20 @@
     
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Abre os portões após um pequeno atraso
         setTimeout(() => {
             document.body.classList.add('open');
-            // Remove os portões do DOM após a animação para liberar totalmente a página
             setTimeout(() => {
                 const gates = document.querySelectorAll('.gate');
                 gates.forEach(gate => gate.style.display = 'none');
-                document.body.style.overflowY = 'auto'; // Permite o scroll
-            }, 1600); // Um pouco depois da transição de 1.5s
+                document.body.style.overflowY = 'auto';
+            }, 1600);
         }, 200);
 
-        // Anima a entrada do conteúdo depois que os portões começam a abrir
         const contentElements = document.querySelectorAll('.reveal-content');
         contentElements.forEach((el, index) => {
             setTimeout(() => {
                 el.classList.add('visible');
-            }, 1000 + (index * 100)); // Sincronizado com a animação do cartão
+            }, 1000 + (index * 100));
         });
 
         const targetDate = new Date('2026-03-21T19:00:00').getTime();
